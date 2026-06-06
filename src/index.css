@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-lg font-semibold 
+           hover:from-primary-700 hover:to-primary-800 transition-all duration-300 
+           shadow-lg hover:shadow-xl transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold border-2 border-primary-200 
+           hover:bg-primary-50 hover:border-primary-300 transition-all duration-300;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent text-primary-600 px-6 py-3 rounded-lg font-semibold border-2 border-primary-500 
+           hover:bg-primary-50 transition-all duration-300;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 p-6;
+  }
+  
+  .card-hover {
+    @apply transform hover:-translate-y-1 transition-transform duration-300;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-cyan-500 bg-clip-text text-transparent;
+  }
+  
+  .hero-gradient {
+    @apply bg-gradient-to-br from-primary-700 via-primary-600 to-cyan-600;
+  }
+  
+  .ad-slot {
+    @apply bg-gray-100 rounded-lg p-4 flex items-center justify-center min-h-[250px];
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
