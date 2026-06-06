@@ -1,0 +1,60 @@
+name: Build & Deploy Pages
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取源码
+        uses: actions/checkout@v4
+
+      - name: 配置Node20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 安装pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
+      - name: 安装依赖
+        run: pnpm install
+
+      - name: 打包生成dist
+        run: pnpm build
+
+      - name: 上传dist产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-file
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: 下载打包文件
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-file
+          path: dist
+
+      - name: 部署Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
