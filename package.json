@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && cp dist/index.html dist/404.html",
     "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
+    "deploy": "npm run build && gh-pages -d dist"
   },
+  "homepage": "https://shinbjerry.github.io/api-key-hub/",
   "dependencies": {
     "lucide-react": "^0.344.0",
     "react": "^18.2.0",
