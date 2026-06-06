@@ -1,5 +1,3 @@
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import { ArrowRight, Zap, Shield, Globe, Brain, Map, Cloud, Newspaper, TrendingUp, Wrench } from 'lucide-react';
 import { categories, freeApiKeys, tutorials } from '../data/mockData';
 
@@ -14,12 +12,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* 顶部导航（自动加上，不影响你原有页面） */}
-      <Navbar />
-
-      {/* 👇 下面 100% 是你原来的完整代码，我一个字都没改！ */}
-
+    <div className="min-h-screen">
       <section className="hero-gradient text-white pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -32,11 +25,11 @@ export default function Home() {
                 提供免费限量API密钥和优质付费API服务，助您快速构建强大的应用程序。无需复杂配置，即刻开始开发。
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <a href="/free" className="btn-primary inline-flex items-center justify-center gap-2">
+                <a href="#/free-keys" className="btn-primary inline-flex items-center justify-center gap-2">
                   获取免费密钥
                   <ArrowRight className="w-5 h-5" />
                 </a>
-                <a href="/paid" className="btn-secondary inline-flex items-center justify-center gap-2">
+                <a href="#/paid-keys" className="btn-secondary inline-flex items-center justify-center gap-2">
                   浏览付费服务
                 </a>
               </div>
@@ -98,7 +91,7 @@ export default function Home() {
               return (
                 <a
                   key={category.id}
-                  href="/free"
+                  href="#/free-keys"
                   className="card card-hover group"
                 >
                   <div className="flex items-start gap-4">
@@ -172,7 +165,7 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <a href="/free" className="mt-4 inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm">
+                <a href="#/free-keys" className="mt-4 inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm">
                   查看全部免费密钥
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </a>
@@ -197,7 +190,7 @@ export default function Home() {
             {tutorials.slice(0, 3).map((tutorial) => (
               <a
                 key={tutorial.id}
-                href="/guides"
+                href="#/guides"
                 className="card card-hover group"
               >
                 <div className="mb-4">
@@ -236,19 +229,16 @@ export default function Home() {
             加入数千名开发者的行列，快速获取所需的API密钥，加速您的项目开发
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/free" className="btn-primary inline-flex items-center justify-center gap-2">
+            <a href="#/free-keys" className="btn-primary inline-flex items-center justify-center gap-2">
               免费开始
               <ArrowRight className="w-5 h-5" />
             </a>
-            <a href="/guides" className="btn-outline inline-flex items-center justify-center gap-2">
+            <a href="#/guides" className="btn-outline inline-flex items-center justify-center gap-2">
               了解更多
             </a>
           </div>
         </div>
       </section>
-
-      {/* 底部页脚（自动加上，完美收尾） */}
-      <Footer />
     </div>
   );
 }

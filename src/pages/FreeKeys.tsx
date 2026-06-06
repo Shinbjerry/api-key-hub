@@ -198,7 +198,7 @@ export default function FreeKeys({ currentUser, onLogin }: FreeKeysProps) {
               <p className="text-white/80 text-sm mb-4">
                 升级到付费套餐，享受无限请求额度和更多高级功能
               </p>
-              <a href="/paid-keys" className="inline-flex items-center gap-2 bg-white text-primary-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
+              <a href="#/paid-keys" className="inline-flex items-center gap-2 bg-white text-primary-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
                 浏览付费套餐
               </a>
             </div>

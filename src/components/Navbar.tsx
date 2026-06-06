@@ -8,19 +8,19 @@ interface NavbarProps {
 }
 
 const mainLinks = [
-  { name: '首页', href: '/' },
-  { name: '免费API密钥', href: '/free-keys' },
-  { name: '付费API密钥', href: '/paid-keys' },
-  { name: 'API指南', href: '/guides' },
+  { name: '首页', href: '#' },
+  { name: '免费API密钥', href: '#/free-keys' },
+  { name: '付费API密钥', href: '#/paid-keys' },
+  { name: 'API指南', href: '#/guides' },
 ];
 
 const quickLinks = [
-  { name: 'API知识介绍', href: '/api-intro' },
-  { name: 'API配置界面', href: '/api-config' },
-  { name: '免费API测试', href: '/api-test' },
-  { name: '购买注意事项', href: '/purchase-notice' },
-  { name: '小说生成示例', href: '/novel-example' },
-  { name: '音频生成示例', href: '/audio-example' },
+  { name: 'API知识介绍', href: '#/api-intro' },
+  { name: 'API配置界面', href: '#/api-config' },
+  { name: '免费API测试', href: '#/api-test' },
+  { name: '购买注意事项', href: '#/purchase-notice' },
+  { name: '小说生成示例', href: '#/novel-example' },
+  { name: '音频生成示例', href: '#/audio-example' },
 ];
 
 export default function Navbar({ currentUser, onLogin, onLogout }: NavbarProps) {

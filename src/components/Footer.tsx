@@ -2,22 +2,22 @@ import { Key, Github, Twitter, Mail, ExternalLink } from 'lucide-react';
 
 const footerLinks = {
   product: [
-    { name: '免费API密钥', href: '/free-keys' },
-    { name: '付费API密钥', href: '/paid-keys' },
-    { name: 'API指南', href: '/guides' },
-    { name: 'API状态', href: '/status' },
+    { name: '免费API密钥', href: '#/free-keys' },
+    { name: '付费API密钥', href: '#/paid-keys' },
+    { name: 'API指南', href: '#/guides' },
+    { name: 'API状态', href: '#/status' },
   ],
   company: [
-    { name: '关于我们', href: '/about' },
-    { name: '联系我们', href: '/contact' },
-    { name: '隐私政策', href: '/privacy' },
-    { name: '服务条款', href: '/terms' },
+    { name: '关于我们', href: '#/about' },
+    { name: '联系我们', href: '#/contact' },
+    { name: '隐私政策', href: '#/privacy' },
+    { name: '服务条款', href: '#/terms' },
   ],
   resources: [
-    { name: '文档中心', href: '/docs' },
-    { name: '开发者社区', href: '/community' },
-    { name: '帮助中心', href: '/help' },
-    { name: 'API更新', href: '/changelog' },
+    { name: '文档中心', href: '#/docs' },
+    { name: '开发者社区', href: '#/community' },
+    { name: '帮助中心', href: '#/help' },
+    { name: 'API更新', href: '#/changelog' },
   ],
   apiPlatforms: [
     { name: 'GPT API平台', href: 'https://platform.openai.com', official: true },
@@ -138,13 +138,13 @@ export default function Footer() {
             © 2024 API Key Hub. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm">
-            <a href="/privacy" className="text-gray-500 hover:text-white transition-colors">
+            <a href="#/privacy" className="text-gray-500 hover:text-white transition-colors">
               隐私政策
             </a>
-            <a href="/terms" className="text-gray-500 hover:text-white transition-colors">
+            <a href="#/terms" className="text-gray-500 hover:text-white transition-colors">
               服务条款
             </a>
-            <a href="/cookies" className="text-gray-500 hover:text-white transition-colors">
+            <a href="#/cookies" className="text-gray-500 hover:text-white transition-colors">
               Cookie设置
             </a>
           </div>

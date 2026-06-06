@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LoginModal from './components/LoginModal';
@@ -45,7 +45,7 @@ export default function App() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Navbar 
         currentUser={currentUser} 
         onLogin={handleLogin} 
@@ -75,6 +75,6 @@ export default function App() {
         onLogin={handleLoginSubmit}
         onRegister={handleRegister}
       />
-    </BrowserRouter>
+    </HashRouter>
   );
 }

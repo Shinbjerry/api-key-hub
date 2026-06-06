@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0;URL='/'">
+    <script type="text/javascript">
+      (function() {
+        var path = window.location.pathname;
+        if (path !== '/' && path !== '/index.html') {
+          window.history.replaceState({}, '', '/#' + path);
+          window.location.href = '/';
+        }
+      })();
+    </script>
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <p>Redirecting to the homepage...</p>
+  </body>
+</html>
