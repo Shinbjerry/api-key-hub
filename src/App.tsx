@@ -4,19 +4,26 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LoginModal from './components/LoginModal';
 import Home from './pages/Home';
-import FreeKeys from './pages/FreeKeys';
-import PaidKeys from './pages/PaidKeys';
-import Guides from './pages/Guides';
+import PostDetail from './pages/PostDetail';
+import NewPost from './pages/NewPost';
+import PaidPlatforms from './pages/PaidPlatforms';
+import { 
+  getCurrentUser, 
+  loginUser, 
+  registerUser, 
+  logoutUser, 
+  initializeStats,
+  User
+} from './utils/storage';
 
 export default function App() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(false);
+  const [currentUser, setCurrentUserState] = useState<User | null>(null);
 
   useEffect(() => {
-    const user = localStorage.getItem('api-key-hub-user');
-    if (user) {
-      setCurrentUser(true);
-    }
+    initializeStats();
+    const user = getCurrentUser();
+    setCurrentUserState(user);
   }, []);
 
   const handleLogin = () => {
@@ -27,21 +34,29 @@ export default function App() {
     setIsLoginModalOpen(false);
   };
 
-  const handleLoginSubmit = (_email: string, _password: string) => {
-    localStorage.setItem('api-key-hub-user', JSON.stringify({ email: _email }));
-    setCurrentUser(true);
-    setIsLoginModalOpen(false);
+  const handleLoginSubmit = (email: string, password: string) => {
+    const user = loginUser(email, password);
+    if (user) {
+      setCurrentUserState(user);
+      setIsLoginModalOpen(false);
+    } else {
+      alert('邮箱或密码错误');
+    }
   };
 
-  const handleRegister = (_name: string, _email: string, _password: string) => {
-    localStorage.setItem('api-key-hub-user', JSON.stringify({ email: _email, name: _name }));
-    setCurrentUser(true);
-    setIsLoginModalOpen(false);
+  const handleRegister = (name: string, email: string, password: string) => {
+    try {
+      const user = registerUser(name, email, password);
+      setCurrentUserState(user);
+      setIsLoginModalOpen(false);
+    } catch (e) {
+      alert(e instanceof Error ? e.message : '注册失败');
+    }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('api-key-hub-user');
-    setCurrentUser(false);
+    logoutUser();
+    setCurrentUserState(null);
   };
 
   return (
@@ -55,15 +70,9 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route 
-            path="/free-keys" 
-            element={<FreeKeys currentUser={currentUser} onLogin={handleLogin} />} 
-          />
-          <Route 
-            path="/paid-keys" 
-            element={<PaidKeys currentUser={currentUser} onLogin={handleLogin} />} 
-          />
-          <Route path="/guides" element={<Guides />} />
+          <Route path="/post/:id" element={<PostDetail />} />
+          <Route path="/post/new" element={<NewPost />} />
+          <Route path="/paid" element={<PaidPlatforms />} />
         </Routes>
       </main>
 

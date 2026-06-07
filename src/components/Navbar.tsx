@@ -1,33 +1,25 @@
-import { useState, useEffect, useRef } from 'react';
-import { Menu, X, Key, User, Mail, Sparkles, ChevronDown, ExternalLink } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, Key, User, Mail, Plus, ExternalLink } from 'lucide-react';
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  createdAt: string;
+}
 
 interface NavbarProps {
-  currentUser: boolean;
+  currentUser: User | null;
   onLogin: () => void;
   onLogout: () => void;
 }
 
-const mainLinks = [
-  { name: '首页', href: '#' },
-  { name: '免费API密钥', href: '#/free-keys' },
-  { name: '付费API密钥', href: '#/paid-keys' },
-  { name: 'API指南', href: '#/guides' },
-];
-
-const quickLinks = [
-  { name: 'API知识介绍', href: '#/api-intro' },
-  { name: 'API配置界面', href: '#/api-config' },
-  { name: '免费API测试', href: '#/api-test' },
-  { name: '购买注意事项', href: '#/purchase-notice' },
-  { name: '小说生成示例', href: '#/novel-example' },
-  { name: '音频生成示例', href: '#/audio-example' },
-];
-
 export default function Navbar({ currentUser, onLogin, onLogout }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isQuickMenuOpen, setIsQuickMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,14 +30,8 @@ export default function Navbar({ currentUser, onLogin, onLogout }: NavbarProps) 
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsQuickMenuOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+    setIsOpen(false);
+  }, [location]);
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -53,141 +39,182 @@ export default function Navbar({ currentUser, onLogin, onLogout }: NavbarProps) 
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-r from-primary-600 to-cyan-500 rounded-lg">
-              <Key className="w-6 h-6 text-white" />
-            </div>
-            <span className={`text-xl font-bold font-heading ${
-              scrolled ? 'text-primary-700' : 'text-white'
-            }`}>
-              API Key Hub
-            </span>
-          </div>
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
+              <div className="p-2 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg">
+                <Key className="w-6 h-6 text-white" />
+              </div>
+              <span className={`text-xl font-bold ${
+                scrolled ? 'text-gray-900' : 'text-white'
+              }`}>
+                API Key Hub
+              </span>
+            </Link>
 
-          <div className="hidden lg:flex items-center gap-2 text-sm">
-            <Sparkles className={`w-4 h-4 ${scrolled ? 'text-yellow-500' : 'text-yellow-300'} animate-pulse`} />
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6">
+            <Link to="/" className={`font-medium transition-colors ${
+              scrolled ? 'text-gray-600 hover:text-blue-600' : 'text-white/90 hover:text-white'
+            }`}>
+              首页
+            </Link>
+            
+            {currentUser && (
+              <Link to="/post/new" className={`font-medium transition-colors ${
+                scrolled ? 'text-gray-600 hover:text-blue-600' : 'text-white/90 hover:text-white'
+              }`}>
+                分享
+              </Link>
+            )}
+            
+            <Link to="/paid" className={`font-medium transition-colors flex items-center gap-1 ${
+              scrolled ? 'text-gray-600 hover:text-blue-600' : 'text-white/90 hover:text-white'
+            }`}>
+              付费API
+              <ExternalLink className="w-4 h-4" />
+            </Link>
+
             <a 
               href="mailto:shinbjerry@gmail.com" 
-              className={`flex items-center gap-1 hover:text-primary-500 transition-colors ${
-                scrolled ? 'text-gray-600' : 'text-white/80'
+              className={`flex items-center gap-2 text-sm font-medium transition-colors ${
+                scrolled ? 'text-gray-500 hover:text-blue-600' : 'text-white/70 hover:text-white'
               }`}
             >
               <Mail className="w-4 h-4" />
-              <span>合作邮箱: shinbjerry@gmail.com</span>
+              <span>合作邮箱</span>
             </a>
           </div>
 
-          <div className="hidden lg:flex items-center gap-6">
-            {mainLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className={`text-sm font-medium transition-colors duration-200 hover:text-primary-500 ${
-                  scrolled ? 'text-gray-700' : 'text-white/90'
-                }`}
-              >
-                {link.name}
-              </a>
-            ))}
+          {/* Auth Buttons */}
+          <div className="hidden md:flex items-center gap-4">
+            {currentUser ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                    <User className="w-4 h-4 text-white" />
+                  </div>
+                  <span className={`font-medium ${
+                    scrolled ? 'text-gray-700' : 'text-white'
+                  }`}>
+                    {currentUser.name}
+                  </span>
+                </div>
+                <button
+                  onClick={onLogout}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    scrolled 
+                      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
+                      : 'bg-white/20 text-white hover:bg-white/30'
+                  }`}
+                >
+                  退出
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  data-login-btn
+                  onClick={onLogin}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    scrolled 
+                      ? 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200' 
+                      : 'bg-white text-blue-600 hover:bg-gray-100'
+                  }`}
+                >
+                  登录
+                </button>
+                <Link
+                  to="/post/new"
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                    scrolled 
+                      ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                      : 'bg-white text-blue-600 hover:bg-gray-100'
+                  }`}
+                >
+                  <Plus className="w-4 h-4" />
+                  分享
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className={`md:hidden p-2 rounded-lg ${
+              scrolled ? 'text-gray-600 hover:bg-gray-100' : 'text-white hover:bg-white/20'
+            }`}
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white border-t">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-3">
+            <Link to="/" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
+              首页
+            </Link>
             
-            <div className="relative" ref={menuRef}>
-              <button
-                onClick={() => setIsQuickMenuOpen(!isQuickMenuOpen)}
-                className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 hover:bg-gray-100 ${
-                  scrolled ? 'text-gray-700' : 'text-white/90'
-                }`}
-              >
-                快捷菜单
-                <ChevronDown className={`w-4 h-4 transition-transform ${isQuickMenuOpen ? 'rotate-180' : ''}`} />
-              </button>
-              
-              {isQuickMenuOpen && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-                  {quickLinks.map((link) => (
-                    <a
-                      key={link.name}
-                      href={link.href}
-                      className="flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-700 transition-colors"
-                    >
-                      <span>{link.name}</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  ))}
+            {currentUser && (
+              <Link to="/post/new" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
+                分享API Key
+              </Link>
+            )}
+            
+            <Link to="/paid" className="block px-3 py-2 text-gray-700 hover:text-blue-600 font-medium">
+              付费API平台
+            </Link>
+
+            <a 
+              href="mailto:shinbjerry@gmail.com" 
+              className="block px-3 py-2 text-gray-500 hover:text-blue-600 text-sm"
+            >
+              合作邮箱
+            </a>
+
+            <div className="pt-4 border-t">
+              {currentUser ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 px-3 py-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center">
+                      <User className="w-4 h-4 text-white" />
+                    </div>
+                    <span className="font-medium text-gray-700">
+                      {currentUser.name}
+                    </span>
+                  </div>
+                  <button
+                    onClick={onLogout}
+                    className="w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium"
+                  >
+                    退出登录
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <button
+                    data-login-btn
+                    onClick={onLogin}
+                    className="w-full px-3 py-2 bg-white text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 font-medium"
+                  >
+                    登录
+                  </button>
+                  <Link
+                    to="/post/new"
+                    className="w-full px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium flex items-center justify-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    分享API Key
+                  </Link>
                 </div>
               )}
             </div>
           </div>
-
-          <div className="hidden md:flex items-center gap-4">
-            {currentUser ? (
-              <button
-                onClick={onLogout}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  scrolled 
-                    ? 'bg-primary-100 text-primary-700 hover:bg-primary-200' 
-                    : 'bg-white/20 text-white hover:bg-white/30'
-                }`}
-              >
-                退出登录
-              </button>
-            ) : (
-              <button
-                onClick={onLogin}
-                className="flex items-center gap-2 bg-white text-primary-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-all duration-200 shadow-md"
-              >
-                <User className="w-4 h-4" />
-                登录/注册
-              </button>
-            )}
-          </div>
-
-          <button
-            className="md:hidden p-2 rounded-lg"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? (
-              <X className={`w-6 h-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} />
-            ) : (
-              <Menu className={`w-6 h-6 ${scrolled ? 'text-gray-700' : 'text-white'}`} />
-            )}
-          </button>
         </div>
-
-        {isOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200 bg-white rounded-b-lg shadow-lg">
-            <div className="flex flex-col gap-4">
-              {[...mainLinks, ...quickLinks].map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-700 rounded-lg transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </a>
-              ))}
-              <div className="px-4">
-                {currentUser ? (
-                  <button
-                    onClick={() => { onLogout(); setIsOpen(false); }}
-                    className="w-full px-4 py-2 bg-primary-100 text-primary-700 rounded-lg text-sm font-medium"
-                  >
-                    退出登录
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => { onLogin(); setIsOpen(false); }}
-                    className="w-full flex items-center justify-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
-                  >
-                    <User className="w-4 h-4" />
-                    登录/注册
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </nav>
   );
 }

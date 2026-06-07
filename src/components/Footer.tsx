@@ -1,130 +1,64 @@
-import { Key, Github, Twitter, Mail, ExternalLink } from 'lucide-react';
-
-const footerLinks = {
-  product: [
-    { name: '免费API密钥', href: '#/free-keys' },
-    { name: '付费API密钥', href: '#/paid-keys' },
-    { name: 'API指南', href: '#/guides' },
-    { name: 'API状态', href: '#/status' },
-  ],
-  company: [
-    { name: '关于我们', href: '#/about' },
-    { name: '联系我们', href: '#/contact' },
-    { name: '隐私政策', href: '#/privacy' },
-    { name: '服务条款', href: '#/terms' },
-  ],
-  resources: [
-    { name: '文档中心', href: '#/docs' },
-    { name: '开发者社区', href: '#/community' },
-    { name: '帮助中心', href: '#/help' },
-    { name: 'API更新', href: '#/changelog' },
-  ],
-  apiPlatforms: [
-    { name: 'GPT API平台', href: 'https://platform.openai.com', official: true },
-    { name: 'Gemini API平台', href: 'https://ai.google.dev', official: true },
-    { name: 'DeepSeek', href: 'https://www.deepseek.com', official: true },
-    { name: 'Kimi', href: 'https://kimi.moonshot.cn', official: true },
-    { name: 'Qwen', href: 'https://www.qwen.tech', official: true },
-  ],
-};
-
-const socialLinks = [
-  { icon: Github, href: '#', label: 'GitHub' },
-  { icon: Twitter, href: '#', label: 'Twitter' },
-  { icon: Mail, href: '#', label: 'Email' },
-];
+import { Key, Mail, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { apiPlatforms } from '../data/blogData';
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Brand */}
+          <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="p-2 bg-gradient-to-r from-primary-600 to-cyan-500 rounded-lg">
+              <div className="p-2 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg">
                 <Key className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold font-heading text-white">
+              <span className="text-xl font-bold text-white">
                 API Key Hub
               </span>
             </div>
-            <p className="text-gray-400 mb-6 max-w-sm">
-              为开发者提供免费和付费API密钥的一站式平台，帮助您快速接入各类API服务。
+            <p className="text-gray-400 mb-4">
+              免费分享各类API Key，通过广告支持我们持续分享，帮助更多开发者！
             </p>
-            <div className="flex items-center gap-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="p-2 bg-gray-800 rounded-lg hover:bg-primary-600 transition-colors"
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
-            </div>
+            <a
+              href="mailto:shinbjerry@gmail.com"
+              className="inline-flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              <span>shinbjerry@gmail.com</span>
+            </a>
           </div>
 
+          {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4">产品</h3>
+            <h3 className="text-white font-semibold mb-4">快速链接</h3>
             <ul className="space-y-2">
-              {footerLinks.product.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link to="/" className="text-gray-400 hover:text-white transition-colors">
+                  首页
+                </Link>
+              </li>
+              <li>
+                <Link to="/paid" className="text-gray-400 hover:text-white transition-colors">
+                  付费API平台
+                </Link>
+              </li>
             </ul>
           </div>
 
-          <div>
-            <h3 className="text-white font-semibold mb-4">公司</h3>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-white font-semibold mb-4">资源</h3>
-            <ul className="space-y-2">
-              {footerLinks.resources.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
+          {/* API Platforms */}
           <div>
             <h3 className="text-white font-semibold mb-4">主流API平台</h3>
             <ul className="space-y-2">
-              {footerLinks.apiPlatforms.map((link) => (
-                <li key={link.name}>
+              {apiPlatforms.slice(0, 4).map((platform, index) => (
+                <li key={index}>
                   <a
-                    href={link.href}
+                    href={platform.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1 text-gray-400 hover:text-white transition-colors"
+                    className="text-gray-400 hover:text-white transition-colors flex items-center gap-1"
                   >
-                    {link.name}
+                    {platform.name}
                     <ExternalLink className="w-3 h-3" />
                   </a>
                 </li>
@@ -135,19 +69,8 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-sm">
-            © 2024 API Key Hub. All rights reserved.
+            © 2024 API Key Hub. 感谢您访问，点击广告支持我们！
           </p>
-          <div className="flex items-center gap-6 text-sm">
-            <a href="#/privacy" className="text-gray-500 hover:text-white transition-colors">
-              隐私政策
-            </a>
-            <a href="#/terms" className="text-gray-500 hover:text-white transition-colors">
-              服务条款
-            </a>
-            <a href="#/cookies" className="text-gray-500 hover:text-white transition-colors">
-              Cookie设置
-            </a>
-          </div>
         </div>
       </div>
     </footer>
