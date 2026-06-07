@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  base: '/API-Key-Hub/', // GitHub Pages使用仓库名作为base路径
-  plugins: [react()]
+  plugins: [react()],
+  // 👇 关键：设置为你的仓库名
+  base: '/api-key-hub/'
 })
