@@ -47,11 +47,24 @@ export function getUserByEmail(email: string): User | undefined {
   return getUsers().find(u => u.email === email);
 }
 
+// ======================
+// ✅ 新增：检查用户名是否存在
+// ======================
+export function isUserNameExists(name: string): boolean {
+  return getUsers().some(u => u.name === name);
+}
+
 export function registerUser(name: string, email: string, password: string): User {
   const users = getUsers();
   
+  // ✅ 保留你原有邮箱检查
   if (users.find(u => u.email === email)) {
     throw new Error('该邮箱已被注册');
+  }
+
+  // ✅ 新增：用户名不能重复
+  if (isUserNameExists(name)) {
+    throw new Error('用户名已存在');
   }
   
   const newUser: User = {
@@ -112,7 +125,6 @@ export function savePosts(posts: ApiKeyPost[]): void {
 export function createPost(postData: Omit<ApiKeyPost, 'id' | 'author' | 'views' | 'createdAt'>, author: User | null): ApiKeyPost {
   const posts = getPosts();
   
-  // 如果未登录，创建一个默认的访客作者
   const authorData: User = author || {
     id: 'guest-' + Date.now(),
     name: '访客',
