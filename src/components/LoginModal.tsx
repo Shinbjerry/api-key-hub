@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Mail, Lock, User } from 'lucide-react';
+import { isUserNameExists, getUserByEmail } from '../utils/storage';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -15,10 +16,29 @@ export default function LoginModal({ isOpen, onClose, onLogin, onRegister }: Log
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  // 验证码
+  const [captcha, setCaptcha] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
+
+  // 生成4位验证码
+  const generateCaptcha = () => {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = '';
+    for (let i = 0; i < 4; i++) {
+      code += chars[Math.floor(Math.random() * chars.length)];
+    }
+    setCaptcha(code);
+    setCaptchaInput('');
+  };
+
+  useEffect(() => {
+    if (isOpen) generateCaptcha();
+  }, [isOpen]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
+
     if (isLogin) {
       if (!email || !password) {
         setError('请填写邮箱和密码');
@@ -26,6 +46,7 @@ export default function LoginModal({ isOpen, onClose, onLogin, onRegister }: Log
       }
       onLogin(email, password);
     } else {
+      // 注册校验
       if (!name || !email || !password) {
         setError('请填写所有字段');
         return;
@@ -34,6 +55,26 @@ export default function LoginModal({ isOpen, onClose, onLogin, onRegister }: Log
         setError('密码至少需要6个字符');
         return;
       }
+
+      // 验证码校验
+      if (captchaInput.toUpperCase() !== captcha) {
+        setError('验证码错误');
+        generateCaptcha();
+        return;
+      }
+
+      // 用户名重复
+      if (isUserNameExists(name)) {
+        setError('用户名已存在');
+        return;
+      }
+
+      // 邮箱重复
+      if (getUserByEmail(email)) {
+        setError('该邮箱已被注册');
+        return;
+      }
+
       onRegister(name, email, password);
     }
   };
@@ -104,7 +145,7 @@ export default function LoginModal({ isOpen, onClose, onLogin, onRegister }: Log
               <input
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
                 placeholder="请输入邮箱"
               />
@@ -126,6 +167,30 @@ export default function LoginModal({ isOpen, onClose, onLogin, onRegister }: Log
               />
             </div>
           </div>
+
+          {/* 验证码 只在注册时显示 */}
+          {!isLogin && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                验证码
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={captchaInput}
+                  onChange={(e) => setCaptchaInput(e.target.value)}
+                  className="flex-1 px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                  placeholder="请输入验证码"
+                />
+                <div
+                  onClick={generateCaptcha}
+                  className="px-4 py-3 bg-gray-100 rounded-lg cursor-pointer select-none font-bold tracking-widest text-gray-700 hover:bg-gray-200"
+                >
+                  {captcha}
+                </div>
+              </div>
+            </div>
+          )}
 
           <button
             type="submit"
